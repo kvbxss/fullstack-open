@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 
 const App = () => {
-  const [persons, setPersons] = useState([{ name: 'Arto Hellas' }]);
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', number: '123-4567890' },
+    { name: 'Ada Lovelace', number: '987-6543210' },
+    { name: 'Grace Hopper', number: '456-7890123' },
+    { name: 'Linus Torvalds', number: '789-0123456' },
+  ]);
+
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleNameChange = (event) => {
     setNewName(event.target.value);
@@ -13,16 +20,20 @@ const App = () => {
     setNewNumber(event.target.value);
   };
 
+  const handleSearchChange = (event) => {
+    setSearchQuery(event.target.value);
+  };
 
   const addPerson = (event) => {
     event.preventDefault();
 
     if (newName.trim() === '' || newNumber.trim() === '') {
-      return; // Ignore empty names
+      return; // Ignore empty name or number
     }
 
     const isDuplicate = persons.some(
-      (person) => person.name.toLowerCase() === newName.toLowerCase());
+      (person) => person.name.toLowerCase() === newName.toLowerCase()
+    );
 
     if (isDuplicate) {
       alert(`${newName} is already added to the phonebook!`);
@@ -39,9 +50,17 @@ const App = () => {
     setNewNumber('');
   };
 
+  const filteredPersons = persons.filter((person) =>
+    person.name.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div>
       <h2>Phonebook</h2>
+      <div>
+        Search: <input value={searchQuery} onChange={handleSearchChange} />
+      </div>
+      <h2>Add a new</h2>
       <form onSubmit={addPerson}>
         <div>
           name: <input value={newName} onChange={handleNameChange} />
@@ -55,7 +74,7 @@ const App = () => {
       </form>
       <h2>Numbers</h2>
       <ul>
-        {persons.map((person, index) => (
+        {filteredPersons.map((person, index) => (
           <li key={index}>
             {person.name} - {person.number}
           </li>
