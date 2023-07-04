@@ -1,11 +1,11 @@
-import React, {useState} from 'react'
+import React from 'react';
 
-
-const Filter = () => {
-    const [searchQuery, setSearchQuery] = useState('');
+const SearchFilter = ({ searchQuery, handleSearchChange }) => {
   return (
-    <div>Filter</div>
-  )
-}
+    <div>
+      Search: <input value={searchQuery} onChange={handleSearchChange} />
+    </div>
+  );
+};
 
-export default Filter
+export default SearchFilter;
