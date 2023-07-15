@@ -3,6 +3,7 @@ import SearchFilter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Person from "./components/Persons";
 import axios from "axios";
+import personService from "./services/notes";
 
 const App = () => {
   const [persons, setPersons] = useState([]);
@@ -43,9 +44,9 @@ const App = () => {
       number: newNumber,
     };
 
-    axios.post("http://localhost:3001/persons", newPerson)
+    personService.create(newPerson)
     .then((response) => {
-      setPersons([...persons, response.data]);
+      setPersons([...persons, response]);
       setNewName("");
       setNewNumber("");
     })
@@ -66,11 +67,16 @@ const App = () => {
 
   const hook = () => {
     console.log("effect");
-    axios.get("http://localhost:3001/persons").then((response) => {
-      console.log("promise fulfilled");
-      setPersons(response.data);
-    });
+    personService.getAll()
+      .then((data) => {
+        console.log("promise fulfilled");
+        setPersons(data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  
 
  
   
