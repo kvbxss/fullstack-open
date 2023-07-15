@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import SearchFilter from "./components/Filter";
 import PersonForm from "./components/PersonForm";
 import Person from "./components/Persons";
-import axios from "axios";
+
 import personService from "./services/notes";
 
 const App = () => {
@@ -27,41 +27,63 @@ const App = () => {
     setPersons(persons.filter((person) => person.id !== id));
   };
 
+ 
+    
+
   const addPerson = (event) => {
     event.preventDefault();
-
+  
     if (newName.trim() === "" || newNumber.trim() === "") {
       return; // Ignore empty name or number
     }
-
-    const isDuplicate = persons.some(
+  
+    const existingPerson = persons.find(
       (person) => person.name.toLowerCase() === newName.toLowerCase()
     );
-
-    if (isDuplicate) {
-      alert(`${newName} is already added to the phonebook!`);
+  
+    if (existingPerson) {
+      const confirmUpdate = window.confirm(
+        `${newName} is already added to the phonebook. Do you want to update the number?`
+      );
+  
+      if (confirmUpdate) {
+        const updatedPerson = { ...existingPerson, number: newNumber };
+  
+        personService
+          .update(existingPerson.id, updatedPerson)
+          .then((response) => {
+            setPersons(
+              persons.map((person) =>
+                person.id === existingPerson.id ? response : person
+              )
+            );
+            setNewName("");
+            setNewNumber("");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      }
       return;
     }
-
+  
     const newPerson = {
       name: newName,
       number: newNumber,
     };
-
-    personService.create(newPerson)
-    .then((response) => {
-      setPersons([...persons, response]);
-      setNewName("");
-      setNewNumber("");
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-    
-    setPersons([...persons, newPerson]);
-    setNewName("");
-    setNewNumber("");
+  
+    personService
+      .create(newPerson)
+      .then((response) => {
+        setPersons([...persons, response]);
+        setNewName("");
+        setNewNumber("");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+  
 
   
 

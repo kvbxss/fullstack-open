@@ -2,6 +2,7 @@ import React from "react";
 import personService from "../services/notes";
 
 const Person = ({ person, handleDelete }) => {
+
   const handleDeleteClick = () => {
     if (window.confirm(`Delete ${person.name}?`)) {
       personService
@@ -14,11 +15,15 @@ const Person = ({ person, handleDelete }) => {
         });
     }
   };
+ 
+
 
   return (
     <li>
       {person.name} {person.number}
+      <br/>
       <button onClick={handleDeleteClick}>Delete</button>
+      
     </li>
   );
 };

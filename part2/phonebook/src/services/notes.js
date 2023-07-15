@@ -15,11 +15,16 @@ const remove = async (id) => {
     const response = await axios.delete(`${baseUrl}/${id}`);
     return response.data;
 };
+const update = async (id, newPerson) => {
+    const response = await axios.put(`${baseUrl}/${id}`, newPerson);
+    return response.data;
+};
 
 const personService = {
   getAll,
   create,
   remove,
+  update,
 };
 
 export default personService;
