@@ -23,6 +23,10 @@ const App = () => {
     setSearchQuery(event.target.value);
   };
 
+  const handleDelete = (id) => {
+    setPersons(persons.filter((person) => person.id !== id));
+  };
+
   const addPerson = (event) => {
     event.preventDefault();
 
@@ -103,7 +107,7 @@ const App = () => {
       <h3>Numbers</h3>
       <ul>
         {filteredPersons.map((person, index) => (
-          <Person key={index} name={person.name} number={person.number} />
+          <Person key={index} person={person} handleDelete={handleDelete} />
         ))}
       </ul>
     </div>
