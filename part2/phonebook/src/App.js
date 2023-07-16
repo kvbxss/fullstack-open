@@ -69,8 +69,14 @@ const App = () => {
             showNotification(`Updated ${response.name}`);
           })
           .catch((error) => {
-            console.log(error);
-          });
+            if (error.response && error.response.status === 404) {
+              showNotification(
+                `Error: The person you are trying to update does not exist.`
+              );
+            } else {
+              console.log(error);
+            }
+          });        
       }
       return;
     }
